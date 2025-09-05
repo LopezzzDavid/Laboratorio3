@@ -78,7 +78,7 @@ class ChatbotPersonalizado:
             'model': self.config.modelo,
             'messages': mensajes,
             'temperature': 0.9,
-            'max_tokens': 2000,
+            'max_tokens': 5000,
         }
         
         try:
