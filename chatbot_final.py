@@ -133,7 +133,7 @@ def main():
             text-align: center;
             padding: 2rem 0;
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: #669bbc;
             border-radius: 10px;
             margin-bottom: 2rem;
         }
