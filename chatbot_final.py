@@ -152,7 +152,7 @@ def main():
         }
         
         .bot-message {
-            background: #f8f9fa;
+            background: #003049;
             border-left: 4px solid #667eea;
             margin-right: 20%;
         }
@@ -376,7 +376,7 @@ def main():
     <div style="text-align: center; color: #64748B; padding: 1.5rem; font-family: 'Inter', sans-serif;">
         <div style="background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%); padding: 1rem; border-radius: 12px; border: 1px solid #E2E8F0;">
             🤖 <strong style="color: #0066CC;">Chatbot Personal</strong> con DeepSeek API | 
-            Desarrollado con ❤️ usando <strong style="color: #0066CC;">Streamlit</strong>
+            Desarrollado con ❤️  usando <strong style="color: #0066CC;">Streamlit</strong>
         </div>
     </div>
     """, unsafe_allow_html=True)
