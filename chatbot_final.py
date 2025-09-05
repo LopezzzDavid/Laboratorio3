@@ -373,9 +373,11 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; color: #666; padding: 1rem;">
-        🤖 Chatbot Personal con DeepSeek API | 
-        Desarrollado con ❤️ usando Streamlit
+    <div style="text-align: center; color: #64748B; padding: 1.5rem; font-family: 'Inter', sans-serif;">
+        <div style="background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%); padding: 1rem; border-radius: 12px; border: 1px solid #E2E8F0;">
+            🤖 <strong style="color: #0066CC;">Chatbot Personal</strong> con DeepSeek API | 
+            Desarrollado con ❤️ usando <strong style="color: #0066CC;">Streamlit</strong>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
