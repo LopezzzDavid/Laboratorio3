@@ -4,14 +4,12 @@ import json
 from datetime import datetime
 import time
 
-# Configuración del chatbot
 class ChatbotConfig:
     def __init__(self):
         self.API_KEY = 'sk-53751d5c6f344a5dbc0571de9f51313e'
         self.API_URL = 'https://api.deepseek.com/v1/chat/completions'
         self.modelo = 'deepseek-chat'
         
-        # PERSONALIZACIÓN: Define la personalidad de tu chatbot
         self.personalidad = {
             "nombre": "Asistente Personal",
             "rol": "un asistente útil y amigable",
@@ -20,7 +18,7 @@ class ChatbotConfig:
             "idioma": "español",
         }
         
-        # Sistema de prompt personalizable
+
         self.sistema_prompt = f"""
         Eres {self.personalidad['nombre']}, {self.personalidad['rol']}.
         Tu tono de comunicación es {self.personalidad['tono']}.
@@ -39,7 +37,7 @@ class ChatbotConfig:
 class ChatbotPersonalizado:
     def __init__(self):
         self.config = ChatbotConfig()
-        self.max_historial = 10  # Mantiene las últimas 10 interacciones
+        self.max_historial = 10 
         
     def agregar_al_historial(self, rol, contenido):
         """Mantiene un historial de conversación para contexto"""
@@ -48,7 +46,7 @@ class ChatbotPersonalizado:
             
         st.session_state.historial_conversacion.append({"role": rol, "content": contenido})
         
-        # Limitar el tamaño del historial
+
         if len(st.session_state.historial_conversacion) > self.max_historial * 2:
             st.session_state.historial_conversacion = st.session_state.historial_conversacion[-self.max_historial * 2:]
     
@@ -56,11 +54,11 @@ class ChatbotPersonalizado:
         """Prepara los mensajes incluyendo el sistema prompt y el historial"""
         mensajes = [{"role": "system", "content": self.config.sistema_prompt}]
         
-        # Agregar historial de conversación
+
         if "historial_conversacion" in st.session_state:
             mensajes.extend(st.session_state.historial_conversacion)
         
-        # Agregar mensaje actual del usuario
+
         mensajes.append({"role": "user", "content": mensaje_usuario})
         
         return mensajes
@@ -90,7 +88,7 @@ class ChatbotPersonalizado:
             if 'choices' in response_data and len(response_data['choices']) > 0:
                 respuesta = response_data['choices'][0]['message']['content']
                 
-                # Agregar al historial
+
                 self.agregar_al_historial("user", mensaje_usuario)
                 self.agregar_al_historial("assistant", respuesta)
                 
@@ -112,21 +110,20 @@ class ChatbotPersonalizado:
         except Exception as e:
             return None, f"❌ Error inesperado: {e}"
 
-# Inicializar el chatbot
+
 @st.cache_resource
 def inicializar_chatbot():
     return ChatbotPersonalizado()
 
 def main():
-    # Configuración de la página
+
     st.set_page_config(
         page_title="🤖 Chatbot Personal",
         page_icon="🤖",
         layout="wide",
         initial_sidebar_state="expanded"
     )
-    
-    # CSS personalizado para mejorar la apariencia
+
     st.markdown("""
     <style>
         .main-header {
@@ -174,16 +171,16 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Inicializar chatbot
+
     chatbot = inicializar_chatbot()
     
-    # Inicializar session state
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
     if "historial_conversacion" not in st.session_state:
         st.session_state.historial_conversacion = []
     
-    # Header principal
+
     st.markdown("""
     <div class="main-header">
         <h1>🤖 Chatbot Personal con DeepSeek</h1>
@@ -191,11 +188,11 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Sidebar con información y controles
+
     with st.sidebar:
         st.markdown("## ⚙️ Configuración")
         
-        # Información del chatbot
+  
         with st.expander("📊 Información del Bot", expanded=True):
             st.markdown(f"""
             **Nombre:** {chatbot.config.personalidad['nombre']}  
@@ -205,7 +202,7 @@ def main():
             **Conversaciones:** {len(st.session_state.historial_conversacion)//2}
             """)
         
-        # Personalización rápida
+
         with st.expander("🎭 Personalización Rápida"):
             nuevo_nombre = st.text_input("Nombre del bot", value=chatbot.config.personalidad['nombre'])
             nuevo_rol = st.text_input("Rol", value=chatbot.config.personalidad['rol'])
@@ -216,7 +213,6 @@ def main():
                 chatbot.config.personalidad['rol'] = nuevo_rol
                 chatbot.config.personalidad['especialidad'] = nueva_especialidad
                 
-                # Actualizar sistema prompt
                 chatbot.config.sistema_prompt = f"""
                 Eres {chatbot.config.personalidad['nombre']}, {chatbot.config.personalidad['rol']}.
                 Tu tono de comunicación es {chatbot.config.personalidad['tono']}.
@@ -235,7 +231,6 @@ def main():
                 st.success("✅ Personalidad actualizada!")
                 st.rerun()
         
-        # Controles
         st.markdown("## 🛠️ Controles")
         
         if st.button("🧹 Limpiar Conversación", type="secondary"):
@@ -253,7 +248,7 @@ def main():
                     st.success("¡Conexión exitosa!")
                     st.info(respuesta)
         
-        # Métricas
+    
         st.markdown("## 📈 Estadísticas")
         col1, col2 = st.columns(2)
         with col1:
@@ -261,13 +256,10 @@ def main():
         with col2:
             st.metric("Contexto", len(st.session_state.historial_conversacion)//2)
     
-    # Área principal del chat
     st.markdown("## 💬 Conversación")
     
-    # Contenedor para los mensajes
     chat_container = st.container()
     
-    # Mostrar mensajes existentes
     with chat_container:
         for message in st.session_state.messages:
             if message["role"] == "user":
@@ -285,10 +277,8 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
     
-    # Input para nuevo mensaje
     st.markdown("---")
     
-    # Crear columnas para el input y botón
     col1, col2, col3 = st.columns([6, 1, 1])
     
     with col1:
@@ -304,12 +294,9 @@ def main():
     with col3:
         ejemplo = st.button("💡 Ejemplo")
     
-    # Procesar mensaje
     if enviar and mensaje_usuario:
-        # Agregar mensaje del usuario
         st.session_state.messages.append({"role": "user", "content": mensaje_usuario})
         
-        # Mostrar mensaje del usuario inmediatamente
         with chat_container:
             st.markdown(f"""
             <div class="chat-message user-message">
@@ -318,17 +305,14 @@ def main():
             </div>
             """, unsafe_allow_html=True)
         
-        # Obtener respuesta del bot
         with st.spinner(f"🤖 {chatbot.config.personalidad['nombre']} está pensando..."):
             respuesta, error = chatbot.enviar_mensaje(mensaje_usuario)
             
             if error:
                 st.error(error)
             else:
-                # Agregar respuesta del bot
                 st.session_state.messages.append({"role": "assistant", "content": respuesta})
                 
-                # Mostrar respuesta con efecto de escritura
                 with chat_container:
                     st.markdown(f"""
                     <div class="chat-message bot-message">
@@ -337,10 +321,8 @@ def main():
                     </div>
                     """, unsafe_allow_html=True)
         
-        # Limpiar input y rerun
         st.rerun()
     
-    # Botón de ejemplo
     if ejemplo:
         ejemplos = [
             "¿Qué puedes hacer por mí?",
@@ -354,7 +336,6 @@ def main():
         st.session_state.user_input = mensaje_ejemplo
         st.rerun()
     
-    # Mensajes de bienvenida si no hay conversación
     if not st.session_state.messages:
         st.markdown("""
         <div style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 10px; margin: 2rem 0;">
@@ -370,7 +351,6 @@ def main():
         </div>
         """, unsafe_allow_html=True)
     
-    # Footer
     st.markdown("---")
     st.markdown("""
     <div style="text-align: center; color: #64748B; padding: 1.5rem; font-family: 'Inter', sans-serif;">
